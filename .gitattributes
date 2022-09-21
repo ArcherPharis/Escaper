@@ -1,0 +1,4 @@
+Content/Level/Level_01_Awaken_BuiltData.uasset filter=lfs diff=lfs merge=lfs -text
+Content/PN_interactiveSpruceForest/Textures/MasterTextures/ModelTextures/Bark_N.uasset filter=lfs diff=lfs merge=lfs -text
+Content/Meshes/PN_interactiveSpruceForest/Textures/MasterTextures/ModelTextures/Bark_N.uasset filter=lfs diff=lfs merge=lfs -text
+
