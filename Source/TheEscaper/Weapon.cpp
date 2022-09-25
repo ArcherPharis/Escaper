@@ -33,3 +33,19 @@ void AWeapon::Tick(float DeltaTime)
 
 }
 
+UAnimMontage* AWeapon::GetAttackMontage() const
+{
+	return attackMontage;
+}
+
+UAnimSequence* AWeapon::GetIdleAnim() const
+{
+	return idleAnim;
+}
+
+UAnimSequence* AWeapon::GetWalkAnim() const
+{
+	return walkAnim;
+}
+
+

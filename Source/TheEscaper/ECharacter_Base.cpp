@@ -2,6 +2,7 @@
 
 
 #include "ECharacter_Base.h"
+#include "Weapon.h"
 
 // Sets default values
 AECharacter_Base::AECharacter_Base()
@@ -15,6 +16,8 @@ AECharacter_Base::AECharacter_Base()
 void AECharacter_Base::BeginPlay()
 {
 	Super::BeginPlay();
+	weapon = GetWorld()->SpawnActor<AWeapon>(weaponClass);
+	weapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("GunHandSocket"));
 	
 }
 
@@ -32,9 +35,22 @@ void AECharacter_Base::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 }
 
+AWeapon* AECharacter_Base::GetCurrentWeapon()
+{
+	return weapon;
+}
+
+
 void AECharacter_Base::Attack()
 {
-	GetMesh()->GetAnimInstance()->Montage_Play(AttackMontage);
+	if (weapon && weapon->GetAttackMontage())
+	{
+		GetMesh()->GetAnimInstance()->Montage_Play(weapon->GetAttackMontage());
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Missing either weapon or attack montage."));
+	}
 
 }
 

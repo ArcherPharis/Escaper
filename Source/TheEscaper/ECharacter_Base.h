@@ -28,10 +28,18 @@ public:
 
 
 
+	UFUNCTION(BlueprintPure, Category = "Weapons")
+	class AWeapon* GetCurrentWeapon();
+
+
 protected:
 	void Attack();
 
 	UPROPERTY(EditDefaultsOnly, Category = "Animation")
 	UAnimMontage* AttackMontage;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Weapons")
+	TSubclassOf<AWeapon> weaponClass;
+	AWeapon* weapon;
 
 };

@@ -23,11 +23,31 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	UAnimMontage* GetAttackMontage() const;
+
+	UFUNCTION(BlueprintPure)
+	UAnimSequence* GetIdleAnim() const;
+
+	UFUNCTION(BlueprintPure)
+	UAnimSequence* GetWalkAnim() const;
+
+
+
 private:
 	UPROPERTY(VisibleDefaultsOnly, Category = "Weapon")
 	class USceneComponent* RootComp;
 
 	UPROPERTY(VisibleDefaultsOnly, Category = "Weapon")
 	class UStaticMeshComponent* WeaponMesh;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Animation")
+	UAnimSequence* idleAnim;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Animation")
+	UAnimSequence* walkAnim;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Animation")
+	UAnimMontage* attackMontage;
+
 
 };
