@@ -21,6 +21,10 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAxis("Turn", this, &APlayerCharacter::Turn);
 	PlayerInputComponent->BindAxis("LookUp", this, &APlayerCharacter::LookUp);
 	PlayerInputComponent->BindAction("Attack", IE_Pressed, this, &APlayerCharacter::Attack);
+	PlayerInputComponent->BindAction("NextWeapon", IE_Pressed, this, &APlayerCharacter::NextWeapon);
+	PlayerInputComponent->BindAction("PreviousWeapon", IE_Pressed, this, &APlayerCharacter::PrevWeapon);
+
+
 
 
 }

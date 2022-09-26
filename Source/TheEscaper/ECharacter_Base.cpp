@@ -2,12 +2,15 @@
 
 
 #include "ECharacter_Base.h"
+#include "Components/CapsuleComponent.h"
+#include "Weapon.h"
 
 // Sets default values
 AECharacter_Base::AECharacter_Base()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+	GetCapsuleComponent()->SetCollisionObjectType(ECC_Character);
 
 }
 
@@ -25,6 +28,25 @@ void AECharacter_Base::Tick(float DeltaTime)
 
 }
 
+void AECharacter_Base::GiveWeapon(TSubclassOf<AWeapon> weaponClass)
+{
+	if (HasWeaponOfType(weaponClass))
+	{
+		//TODO: maybe add ammo here
+		return;
+	}
+
+	AWeapon* newWeapon = GetWorld()->SpawnActor<AWeapon>(weaponClass);
+	newWeapon->SetOwner(this);
+	newWeapon->OnAcquired(GetMesh());
+	weapons.Add(newWeapon);
+
+	if (currentWeapon == nullptr)
+	{
+		EquipWeapon(weapons.Num() - 1);
+	}
+}
+
 // Called to bind functionality to input
 void AECharacter_Base::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
@@ -34,7 +56,84 @@ void AECharacter_Base::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 void AECharacter_Base::Attack()
 {
-	GetMesh()->GetAnimInstance()->Montage_Play(AttackMontage);
+	if (currentWeapon != nullptr && !GetWorldTimerManager().IsTimerActive(WeaponSwitchingHandle))
+	{
+		currentWeapon->Attack();
+	}
+}
+
+void AECharacter_Base::PrevWeapon()
+{
+
+	if (weapons.Num() <= 0)
+		return;
+
+	int previousIndex = weaponIndex - 1;
+
+	if (previousIndex < 0)
+	{
+		previousIndex = weapons.Num() - 1;
+	}
+	EquipWeapon(previousIndex);
 
 }
+
+void AECharacter_Base::NextWeapon()
+{
+
+	if (weapons.Num() <= 0)
+		return;
+	int nextIndex = weaponIndex + 1;
+	if (nextIndex >= weapons.Num())
+	{
+		nextIndex = 0;
+	}
+	EquipWeapon(nextIndex);
+}
+
+
+bool AECharacter_Base::HasWeaponOfType(TSubclassOf<AWeapon> weaponClass) const
+{
+	for (AWeapon* weapon : weapons)
+	{
+		if (weapon->GetClass() == weaponClass)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+void AECharacter_Base::EquipWeapon(int index)
+{
+
+	if (currentWeapon == weapons[index])
+	{
+		return;
+	}
+
+
+	float SwitchDuration = GetMesh()->GetAnimInstance()->Montage_Play(WeaponSwitchMontage);
+
+
+	weaponIndex = index;
+	GetWorldTimerManager().SetTimer(WeaponSwitchingHandle, this, &AECharacter_Base::WeaponSwitchTimePoint, SwitchDuration / 2, false);
+
+
+
+}
+
+void AECharacter_Base::WeaponSwitchTimePoint()
+{
+
+	if (currentWeapon)
+	{
+		currentWeapon->SetActorHiddenInGame(true);
+	}
+
+	currentWeapon = weapons[weaponIndex];
+	currentWeapon->SetActorHiddenInGame(false);
+
+}
+
 

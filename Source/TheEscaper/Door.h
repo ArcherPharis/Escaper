@@ -14,6 +14,9 @@ class THEESCAPER_API ADoor : public ATriggerable
 {
 	GENERATED_BODY()
 
+public:
+	ADoor();
+
 protected:
 	UFUNCTION(BlueprintImplementableEvent, Category = "Door")
 	void SetDoorOpen(bool bIsOpen);

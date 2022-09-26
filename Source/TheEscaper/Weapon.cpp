@@ -33,3 +33,42 @@ void AWeapon::Tick(float DeltaTime)
 
 }
 
+void AWeapon::OnAcquired(USkeletalMeshComponent* ownerMeshComponent)
+{
+	OwnerSkeletalMesh = ownerMeshComponent;
+	SetActorHiddenInGame(true);
+	AttachToComponent(OwnerSkeletalMesh, FAttachmentTransformRules::SnapToTargetIncludingScale, WeaponSocket);
+
+}
+
+void AWeapon::Attack()
+{
+	if (canFire) {
+		canFire = false;
+		OwnerSkeletalMesh->GetAnimInstance()->Montage_Play(AttackMontage);
+		FTimerHandle FireRateHandle;
+		GetWorldTimerManager().SetTimer(FireRateHandle, this, &AWeapon::CanFire, 1/fireRate);
+	}
+}
+
+void AWeapon::GetAnims(UAnimSequence*& Idle, UAnimSequence*& Walk, UAnimMontage*& Attack) const
+{
+
+	Idle = IdleAnim;
+	Walk = WalkAnim;
+	Attack = AttackMontage;
+}
+
+void AWeapon::AttackPointAnimNotify()
+{
+
+	UE_LOG(LogTemp, Warning, TEXT("Commiting attack!!!!!!!!!!!!!"));
+}
+
+void AWeapon::CanFire()
+{
+	canFire = true;
+}
+
+
+

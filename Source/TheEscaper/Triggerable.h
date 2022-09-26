@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "Triggerable.generated.h"
 
+class UBoxComponent;
+
 UCLASS()
 class THEESCAPER_API ATriggerable : public AActor
 {
@@ -23,12 +25,14 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	FORCEINLINE UBoxComponent* GetTriggerBox() const { return TriggerComp; }
+
 private:
 	UPROPERTY()
 	class USceneComponent* RootComp;
 
 	UPROPERTY(VisibleDefaultsOnly, Category = "Trigger")
-	class UBoxComponent* TriggerComp;
+	UBoxComponent* TriggerComp;
 
 	UFUNCTION()
 	void Overlapped(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
