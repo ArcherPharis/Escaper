@@ -13,7 +13,7 @@ void AGun::AttackPointAnimNotify()
 	FRotator ownerViewRot;
 	GetOwner()->GetActorEyesViewPoint(ownerViewLocation, ownerViewRot);
 	FVector Start = WeaponMesh->GetSocketLocation(MuzzleSocketName);
-	if (GetWorld()->LineTraceSingleByChannel(result, Start, ownerViewLocation + ownerViewRot.Vector() * shootRange, ECC_Camera))
+	if (GetWorld()->LineTraceSingleByChannel(result, Start, ownerViewLocation + ownerViewRot.Vector() * shootRange, ECC_Camera) && result.GetActor() != this && result.GetActor() != GetOwner())
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Damaging %s"), *result.GetActor()->GetName());
 		UGameplayStatics::ApplyDamage(result.GetActor(), damage, nullptr, GetOwner(), nullptr);
