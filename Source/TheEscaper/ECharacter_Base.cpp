@@ -4,6 +4,7 @@
 #include "ECharacter_Base.h"
 #include "Components/CapsuleComponent.h"
 #include "Weapon.h"
+#include "HealthComponent.h"
 
 // Sets default values
 AECharacter_Base::AECharacter_Base()
@@ -11,6 +12,7 @@ AECharacter_Base::AECharacter_Base()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	GetCapsuleComponent()->SetCollisionObjectType(ECC_Character);
+	healthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("HealthComponent"));
 
 }
 

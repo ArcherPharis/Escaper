@@ -47,6 +47,9 @@ protected:
 
 private:
 
+	UPROPERTY(EditDefaultsOnly, Category = "Stats")
+	class UHealthComponent* healthComponent;
+
 	UPROPERTY(EditDefaultsOnly, Category = "Animaiton")
 	UAnimMontage* WeaponSwitchMontage;
 
