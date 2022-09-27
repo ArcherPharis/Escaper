@@ -33,7 +33,8 @@ void UHealthComponent::DamageTaken(AActor* DamagedActor, float Damage, const UDa
 		return;
 	}
 
-	Health -= Damage;
+	float damageDone = FMath::Min(Health, Damage);
+	Health -= damageDone;
 
 	UE_LOG(LogTemp, Warning, TEXT("Health: %f"), Health);
 
@@ -45,5 +46,10 @@ void UHealthComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// ...
+}
+
+float UHealthComponent::CurrentHealth()
+{
+	return Health / MaxHealth;
 }
 

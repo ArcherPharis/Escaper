@@ -22,7 +22,7 @@ protected:
 
 private:
 	UPROPERTY(EditAnywhere, Category = "Health")
-	float MaxHealth = 100.f;
+	float MaxHealth = 100.0f;
 	float Health = 0.f;
 
 
@@ -32,6 +32,9 @@ private:
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+
+	UFUNCTION(BlueprintCallable)
+	float CurrentHealth();
 
 	
 };
