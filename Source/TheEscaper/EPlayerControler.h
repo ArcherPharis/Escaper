@@ -13,5 +13,24 @@ UCLASS()
 class THEESCAPER_API AEPlayerControler : public APlayerController
 {
 	GENERATED_BODY()
+
+public:
+	virtual void OnPossess(APawn* newPawn) override;
+	AEPlayerControler();
+
+
+private:
+	class APlayerCharacter* playerCharacter;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Player")
+	TSubclassOf<APawn> deathPawnClass;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Player")
+	TSubclassOf<class UInGameUI> inGameUIClass;
+
+	UInGameUI* inGameUI;
+
+	UFUNCTION()
+	void PawnDead();
 	
 };

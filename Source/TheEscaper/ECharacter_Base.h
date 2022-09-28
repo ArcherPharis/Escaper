@@ -33,6 +33,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
 	FORCEINLINE	AWeapon* GetCurrentWeapon() const { return currentWeapon; }
+	FORCEINLINE class UHealthComponent* GetHealthComp() const { return healthComp; }
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
@@ -62,5 +63,28 @@ private:
 	bool HasWeaponOfType(TSubclassOf<AWeapon> weaponClass) const;
 
 	void EquipWeapon(int index);
+
+	
+
+	UPROPERTY(VisibleDefaultsOnly, Category = "Health")
+	class UHealthComponent* healthComp;
+
+	UFUNCTION()
+	void HealthChanged(float val, float delta, float max);
+	
+	UFUNCTION()
+	void StartDeathSequence();
+
+	virtual void OnHealthChange(float val, float delta, float max);
+	virtual void OnDeathStart();
+
+	UPROPERTY(EditDefaultsOnly, Category = "Animation")
+	UAnimMontage* DeathMontage;
+
+	void Dead();
+	FTimerHandle DeathTimerHandle;
+	bool bIsDead = false;
+
+	void DisableGameplayRelevancy();
 
 };
