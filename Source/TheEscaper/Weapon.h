@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "Weapon.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnAmmoChange, int, value);
+
 UCLASS()
 class THEESCAPER_API AWeapon : public AActor
 {
@@ -14,6 +16,8 @@ class THEESCAPER_API AWeapon : public AActor
 public:	
 	// Sets default values for this actor's properties
 	AWeapon();
+
+	FOnAmmoChange onAmmoChange;
 
 protected:
 	// Called when the game starts or when spawned
@@ -26,15 +30,28 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	void SetCanFire(bool bCanFire);
+
 	virtual void OnAcquired(class USkeletalMeshComponent* ownerMeshComponent);
 
-	void Attack();
+	virtual void Attack();
+
+	bool GetIsFireArm() const { return bIsFirearm; }
+
+	virtual void CanFire();
 
 	UFUNCTION(BlueprintPure, Category = "Animation")
 	void GetAnims(UAnimSequence*& Idle, UAnimSequence*& Walk, UAnimMontage*& Attack) const;
 
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
 	virtual void AttackPointAnimNotify();
+
+	UFUNCTION(BlueprintCallable, Category = "Weapon")
+	virtual void ReloadAnimNotify();
+
+	virtual void ReloadWeapon();
+
+	USkeletalMeshComponent* GetSkeletalMesh() const;
 
 private:
 	UPROPERTY(VisibleDefaultsOnly, Category = "Weapon")
@@ -50,11 +67,14 @@ private:
 	UAnimMontage* AttackMontage;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
+	bool bIsFirearm;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
 	FName WeaponSocket;
 
 	USkeletalMeshComponent* OwnerSkeletalMesh;
 
-	void CanFire();
+	
 	UPROPERTY(EditAnywhere, Category = "Weapon")
 	float fireRate = 1.f;
 	bool canFire = true;

@@ -15,6 +15,7 @@ AECharacter_Base::AECharacter_Base()
 	healthComp = CreateDefaultSubobject<UHealthComponent>(TEXT("HealthComponent"));
 	healthComp->OnHealthChanged.AddDynamic(this, &AECharacter_Base::HealthChanged);
 	healthComp->OnHealthEmpty.AddDynamic(this, &AECharacter_Base::StartDeathSequence);
+	
 
 
 }
@@ -24,6 +25,7 @@ void AECharacter_Base::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	
 }
 
 // Called every frame
@@ -31,13 +33,13 @@ void AECharacter_Base::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+
 }
 
 void AECharacter_Base::GiveWeapon(TSubclassOf<AWeapon> weaponClass)
 {
 	if (HasWeaponOfType(weaponClass))
 	{
-		//TODO: maybe add ammo here
 		return;
 	}
 
@@ -52,6 +54,8 @@ void AECharacter_Base::GiveWeapon(TSubclassOf<AWeapon> weaponClass)
 	}
 }
 
+
+
 // Called to bind functionality to input
 void AECharacter_Base::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
@@ -64,6 +68,14 @@ void AECharacter_Base::Attack()
 	if (currentWeapon != nullptr && !GetWorldTimerManager().IsTimerActive(WeaponSwitchingHandle))
 	{
 		currentWeapon->Attack();
+	}
+}
+
+void AECharacter_Base::Reload()
+{
+	if (currentWeapon != nullptr && !GetWorldTimerManager().IsTimerActive(WeaponSwitchingHandle))
+	{
+		currentWeapon->ReloadWeapon();
 	}
 }
 
@@ -116,12 +128,11 @@ void AECharacter_Base::EquipWeapon(int index)
 	{
 		return;
 	}
-
-
 	float SwitchDuration = GetMesh()->GetAnimInstance()->Montage_Play(WeaponSwitchMontage);
 
 
 	weaponIndex = index;
+	currentWeapon = weapons[index];
 	GetWorldTimerManager().SetTimer(WeaponSwitchingHandle, this, &AECharacter_Base::WeaponSwitchTimePoint, SwitchDuration / 2, false);
 
 

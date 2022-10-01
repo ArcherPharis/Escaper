@@ -33,6 +33,11 @@ void AWeapon::Tick(float DeltaTime)
 
 }
 
+void AWeapon::SetCanFire(bool bCanFire)
+{
+	canFire = bCanFire;
+}
+
 void AWeapon::OnAcquired(USkeletalMeshComponent* ownerMeshComponent)
 {
 	OwnerSkeletalMesh = ownerMeshComponent;
@@ -49,6 +54,7 @@ void AWeapon::Attack()
 		FTimerHandle FireRateHandle;
 		GetWorldTimerManager().SetTimer(FireRateHandle, this, &AWeapon::CanFire, 1/fireRate);
 	}
+
 }
 
 void AWeapon::GetAnims(UAnimSequence*& Idle, UAnimSequence*& Walk, UAnimMontage*& Attack) const
@@ -63,6 +69,19 @@ void AWeapon::AttackPointAnimNotify()
 {
 
 	UE_LOG(LogTemp, Warning, TEXT("Commiting attack!!!!!!!!!!!!!"));
+}
+
+void AWeapon::ReloadAnimNotify()
+{
+}
+
+void AWeapon::ReloadWeapon()
+{
+}
+
+USkeletalMeshComponent* AWeapon::GetSkeletalMesh() const
+{
+	return OwnerSkeletalMesh;
 }
 
 void AWeapon::CanFire()

@@ -3,6 +3,9 @@
 
 #include "PlayerCharacter.h"
 #include "Camera/CameraComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "EPlayerControler.h"
+#include "Weapon.h"
 
 APlayerCharacter::APlayerCharacter()
 {
@@ -23,6 +26,8 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAction("Attack", IE_Pressed, this, &APlayerCharacter::Attack);
 	PlayerInputComponent->BindAction("NextWeapon", IE_Pressed, this, &APlayerCharacter::NextWeapon);
 	PlayerInputComponent->BindAction("PreviousWeapon", IE_Pressed, this, &APlayerCharacter::PrevWeapon);
+	PlayerInputComponent->BindAction("Reload", IE_Pressed, this, &APlayerCharacter::Reload);
+
 
 
 
@@ -33,8 +38,27 @@ void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	GetMesh()->AttachToComponent(playerEye, FAttachmentTransformRules::KeepWorldTransform);
+	playerController = Cast<AEPlayerControler>(UGameplayStatics::GetPlayerController(this, 0));
+	if (GetCurrentWeapon()->GetIsFireArm())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("it's a gun!"));
+		GetCurrentWeapon()->onAmmoChange.AddDynamic(this, &APlayerCharacter::DeliverAmmoInfo);
+		
+	}
 
 }
+
+void APlayerCharacter::DeliverAmmoInfo(int value)
+{
+	playerController->GetAmmoInfo(value);
+}
+
+
+
+
+
+
+
 
 void APlayerCharacter::MoveRight(float value)
 {
@@ -51,6 +75,8 @@ void APlayerCharacter::LookUp(float value)
 {
 	AddControllerPitchInput(value);
 }
+
+
 
 void APlayerCharacter::MoveForward(float value)
 {

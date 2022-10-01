@@ -34,6 +34,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
 	FORCEINLINE	AWeapon* GetCurrentWeapon() const { return currentWeapon; }
 	FORCEINLINE class UHealthComponent* GetHealthComp() const { return healthComp; }
+	
+
+
+
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
@@ -42,7 +46,7 @@ public:
 
 protected:
 	void Attack();
-
+	void Reload();
 	void PrevWeapon();
 	void NextWeapon();
 
@@ -57,6 +61,7 @@ private:
 	UPROPERTY()
 	TArray<AWeapon*> weapons;
 
+	UPROPERTY(EditAnywhere, Category = "Weapon")
 	AWeapon* currentWeapon;
 	int weaponIndex = -1;
 

@@ -18,6 +18,11 @@ public:
 	virtual void OnPossess(APawn* newPawn) override;
 	AEPlayerControler();
 
+	virtual void BeginPlay() override;
+	virtual void Tick(float DeltaTime) override;
+
+	void GetAmmoInfo(int value);
+
 
 private:
 	class APlayerCharacter* playerCharacter;

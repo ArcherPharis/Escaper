@@ -18,8 +18,14 @@ public:
 	UFUNCTION()
 	void UpdateHealth(float health, float delta, float maxHealth);
 
+	UFUNCTION()
+	void UpdateAmmoText(int newValue);
+
 private:
 	UPROPERTY(meta = (BindWidget))
 	class UValueGauge* healthBar;
+
+	UPROPERTY(meta = (BindWidget))
+	class UTextBlock* ammoText;
 	
 };

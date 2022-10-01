@@ -23,11 +23,21 @@ public:
 
 	virtual void BeginPlay() override;
 
+	UFUNCTION()
+	void DeliverAmmoInfo(int value);
+
+	
+
+
+
 private:
 	void MoveForward(float value);
 	void MoveRight(float value);
 	void Turn(float value);
 	void LookUp(float value);
+	class AEPlayerControler* playerController;
+	
+	
 	
 
 	UPROPERTY(VisibleDefaultsOnly, Category = "Player")

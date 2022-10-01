@@ -10,6 +10,8 @@ void AEPlayerControler::OnPossess(APawn* newPawn) //happens every time something
 {
 	Super::OnPossess(newPawn);
 	playerCharacter = Cast<APlayerCharacter>(newPawn);
+	
+
 	if (playerCharacter)
 	{
 		SetViewTarget(playerCharacter);
@@ -33,6 +35,22 @@ void AEPlayerControler::OnPossess(APawn* newPawn) //happens every time something
 AEPlayerControler::AEPlayerControler()
 {
 	bAutoManageActiveCameraTarget = false;
+}
+
+void AEPlayerControler::BeginPlay()
+{
+	Super::BeginPlay();
+}
+
+void AEPlayerControler::Tick(float DeltaTime)
+{
+	
+
+}
+
+void AEPlayerControler::GetAmmoInfo(int value)
+{
+	inGameUI->UpdateAmmoText(value);
 }
 
 void AEPlayerControler::PawnDead()
