@@ -20,6 +20,9 @@ void AEPlayerControler::OnPossess(APawn* newPawn) //happens every time something
 			inGameUI = CreateWidget<UInGameUI>(this, inGameUIClass);
 			inGameUI->AddToViewport();
 			playerCharacter->GetHealthComp()->OnHealthChanged.AddDynamic(inGameUI, &UInGameUI::UpdateHealth);
+			playerCharacter->OnWeaponGiven.AddDynamic(inGameUI, &UInGameUI::NewWeaponGiven);
+			playerCharacter->OnWeaponSwitched.AddDynamic(inGameUI, &UInGameUI::WeaponSwitched);
+
 		}
 	}
 	else

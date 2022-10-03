@@ -45,6 +45,7 @@ void AECharacter_Base::GiveWeapon(TSubclassOf<AWeapon> weaponClass)
 	newWeapon->SetOwner(this);
 	newWeapon->OnAcquired(GetMesh());
 	weapons.Add(newWeapon);
+	OnWeaponGiven.Broadcast(newWeapon);
 
 	if (currentWeapon == nullptr)
 	{
@@ -96,6 +97,14 @@ void AECharacter_Base::NextWeapon()
 	EquipWeapon(nextIndex);
 }
 
+void AECharacter_Base::Reload()
+{
+	if (currentWeapon)
+	{
+		currentWeapon->Reload();
+	}
+}
+
 
 bool AECharacter_Base::HasWeaponOfType(TSubclassOf<AWeapon> weaponClass) const
 {
@@ -119,8 +128,6 @@ void AECharacter_Base::EquipWeapon(int index)
 
 
 	float SwitchDuration = GetMesh()->GetAnimInstance()->Montage_Play(WeaponSwitchMontage);
-
-
 	weaponIndex = index;
 	GetWorldTimerManager().SetTimer(WeaponSwitchingHandle, this, &AECharacter_Base::WeaponSwitchTimePoint, SwitchDuration / 2, false);
 
@@ -183,11 +190,12 @@ void AECharacter_Base::WeaponSwitchTimePoint()
 
 	if (currentWeapon)
 	{
-		currentWeapon->SetActorHiddenInGame(true);
+		currentWeapon->PutInInventory();
 	}
 
 	currentWeapon = weapons[weaponIndex];
-	currentWeapon->SetActorHiddenInGame(false);
+	currentWeapon->PutInHand();
+	OnWeaponSwitched.Broadcast(currentWeapon);
 
 }
 
