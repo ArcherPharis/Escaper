@@ -39,12 +39,7 @@ void APlayerCharacter::BeginPlay()
 	Super::BeginPlay();
 	GetMesh()->AttachToComponent(playerEye, FAttachmentTransformRules::KeepWorldTransform);
 	playerController = Cast<AEPlayerControler>(UGameplayStatics::GetPlayerController(this, 0));
-	if (GetCurrentWeapon()->GetIsFireArm())
-	{
-		UE_LOG(LogTemp, Warning, TEXT("it's a gun!"));
-		GetCurrentWeapon()->onAmmoChange.AddDynamic(this, &APlayerCharacter::DeliverAmmoInfo);
-		
-	}
+	GetCurrentWeapon()->onAmmoChange.AddDynamic(this, &APlayerCharacter::DeliverAmmoInfo);
 
 }
 

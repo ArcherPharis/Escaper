@@ -67,6 +67,11 @@ void AGun::AttackPointAnimNotify()
 			UGameplayStatics::ApplyDamage(result.GetActor(), damage, nullptr, GetOwner(), nullptr);
 			ammo = FMath::Clamp(ammo - 1, 0, maxAmmo);
 			onAmmoChange.Broadcast(ammo);
+
+			if (ammo == 0)
+			{
+				ReloadWeapon();
+			}
 		}
 
 	}
