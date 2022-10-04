@@ -27,6 +27,8 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Animation")
 	UAnimMontage* ReloadMontage;
 
+	virtual bool CanAttack() const;
+
 	bool canFire = true;
 
 public:	
@@ -43,6 +45,7 @@ public:
 	virtual void PutInInventory();
 	virtual void PutInHand();
 
+
 	UFUNCTION(BlueprintPure, Category = "Animation")
 	void GetAnims(UAnimSequence*& Idle, UAnimSequence*& Walk, UAnimMontage*& Attack) const;
 
@@ -52,6 +55,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
 	FORCEINLINE USkeletalMeshComponent* GetOwnerSkeletalMesh() const { return OwnerSkeletalMesh; }
+
+
+	float GetWeaponDamage() const { return damage; }
 
 	FORCEINLINE UTexture2D* GetCrossHairTexture() const { return crossHairTexture; }
 	FORCEINLINE UTexture2D* GetWeaponIcon() const { return weaponIconTexture; }
@@ -66,7 +72,8 @@ private:
 	UPROPERTY(VisibleDefaultsOnly, Category = "Weapon")
 	class USceneComponent* RootComp;
 
-
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
+	float damage = 10.f;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Animation")
 	UAnimSequence* IdleAnim;
@@ -87,8 +94,9 @@ private:
 
 	USkeletalMeshComponent* OwnerSkeletalMesh;
 
-	void CanFire();
 	UPROPERTY(EditAnywhere, Category = "Weapon")
 	float fireRate = 1.f;
+
+	FTimerHandle FiringTimer;
 	
 };

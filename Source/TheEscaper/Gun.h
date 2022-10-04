@@ -18,6 +18,10 @@ protected:
 	UFUNCTION(BlueprintImplementableEvent, Category = "Weapon", meta = (DisplayName="OnBulletHit"))
 	void BP_OnBulletHit(const FHitResult& hitResult);
 
+	virtual void AttackPointAnimNotify() override;
+
+	FName GetMuzzleSocketName() const { return MuzzleSocketName; }
+
 private:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
@@ -37,12 +41,12 @@ private:
 	float shootRange = 10000.f;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
-	float damage = 10.f;
-
-	virtual void AttackPointAnimNotify() override;
+	bool bIsLauncher = false;
+	
 
 	virtual void Reload() override;
 	bool IsReloading() const;
+	virtual bool CanAttack() const override;
 	FTimerHandle ReloadTimerHandle;
 
 	void ReloadTimePoint();

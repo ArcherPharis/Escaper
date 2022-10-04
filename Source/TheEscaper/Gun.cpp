@@ -1,41 +1,35 @@
-
-
-
 #include "Gun.h"
-#include "Kismet/GameplayStatics.h"
+#include "kismet/GameplayStatics.h"
 
 void AGun::AttackPointAnimNotify()
 {
 	Super::AttackPointAnimNotify();
 
-	
-
-	FHitResult result;
-	FVector ownerViewLocation;
-	FRotator ownerViewRot;
-	GetOwner()->GetActorEyesViewPoint(ownerViewLocation, ownerViewRot);
-	FVector Start = WeaponMesh->GetSocketLocation(MuzzleSocketName);
-	if (GetWorld()->LineTraceSingleByChannel(result, Start, ownerViewLocation + ownerViewRot.Vector() * shootRange, ECC_Camera))
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Damaging %s"), *result.GetActor()->GetName());
-		UGameplayStatics::ApplyDamage(result.GetActor(), damage, nullptr, GetOwner(), nullptr);
-		BP_OnBulletHit(result);
+	if (!bIsLauncher) {
+		FHitResult result;
+		FVector ownerViewLoc;
+		FRotator ownerViewRot;
+		GetOwner()->GetActorEyesViewPoint(ownerViewLoc, ownerViewRot);
+		FVector Start = WeaponMesh->GetSocketLocation(MuzzleSocketName);
+		if (GetWorld()->LineTraceSingleByChannel(result, Start, ownerViewLoc + ownerViewRot.Vector() * shootRange, ECC_Camera))
+		{
+			UGameplayStatics::ApplyDamage(result.GetActor(), GetWeaponDamage(), nullptr, GetOwner(), nullptr);
+			BP_OnBulletHit(result);
+		}
 	}
 
 	ammoInClip--;
 	OnAmmoUpdated.Broadcast(ammoInClip, ammoInventory);
-	if (ammoInClip == 0)
+	if (ammoInClip == 0 && ammoInventory != 0)
 	{
 		Reload();
 	}
-
 }
 
 void AGun::Reload()
 {
-
 	if (IsReloading() || ammoInClip >= clipCapacity) return;
-	
+
 	float reloadDuration = GetOwnerSkeletalMesh()->GetAnimInstance()->Montage_Play(ReloadMontage);
 	GetWorldTimerManager().SetTimer(ReloadTimerHandle, this, &AGun::ReloadTimePoint, reloadDuration, false);
 }
@@ -48,7 +42,6 @@ bool AGun::IsReloading() const
 void AGun::ReloadTimePoint()
 {
 	int ammoNeeded = clipCapacity - ammoInClip;
-
 	if (ammoNeeded > ammoInventory)
 	{
 		ammoNeeded = ammoInventory;
@@ -57,13 +50,12 @@ void AGun::ReloadTimePoint()
 	ammoInventory -= ammoNeeded;
 	ammoInClip += ammoNeeded;
 	OnAmmoUpdated.Broadcast(ammoInClip, ammoInventory);
-
 }
 
 void AGun::PutInInventory()
 {
 	Super::PutInInventory();
-	GetWorldTimerManager().ClearTimer(ReloadTimerHandle); //cancels it if its active, does nothing if it's not.
+	GetWorldTimerManager().ClearTimer(ReloadTimerHandle);
 }
 
 bool AGun::GetAmmoStatus(int& clipAmmo, int& inventoryAmmo) const
@@ -73,3 +65,9 @@ bool AGun::GetAmmoStatus(int& clipAmmo, int& inventoryAmmo) const
 	return true;
 }
 
+bool AGun::CanAttack() const
+{
+	if (IsReloading() || ammoInClip == 0) return false;
+
+	return Super::CanAttack();
+}
