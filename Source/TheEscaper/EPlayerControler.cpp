@@ -38,6 +38,11 @@ AEPlayerControler::AEPlayerControler()
 	bAutoManageActiveCameraTarget = false;
 }
 
+void AEPlayerControler::CaughtFinished()
+{
+	inGameUI->SwitchToGameOverMenu();
+}
+
 void AEPlayerControler::PawnDead()
 {
 	playerCharacter->SetActorHiddenInGame(true);
@@ -45,4 +50,17 @@ void AEPlayerControler::PawnDead()
 	APawn* DeathPawn = GetWorld()->SpawnActor<APawn>(deathPawnClass, playerCharacter->GetTransform());
 	Possess(DeathPawn);
 
+}
+
+void AEPlayerControler::Caught()
+{
+
+	if (bIsCaught) return;
+
+	bIsCaught = true;
+	if (GetWorldTimerManager().IsTimerActive(CaughtTimerHandle)) return;
+	float caughtDuration = playerCharacter->Caught();
+	SetInputMode(FInputModeUIOnly());
+	GetWorldTimerManager().SetTimer(CaughtTimerHandle, this, &AEPlayerControler:: CaughtFinished, caughtDuration, false);
+	inGameUI->SwitchToGameOverMenu();
 }

@@ -24,6 +24,8 @@ public:
 	UFUNCTION()
 	void WeaponSwitched(class AWeapon* weapon);
 
+	void SwitchToGameOverMenu();
+
 private:
 	UPROPERTY(meta = (BindWidget))
 	class UValueGauge* healthBar;

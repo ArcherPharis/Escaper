@@ -23,6 +23,11 @@ public:
 
 	virtual void BeginPlay() override;
 
+	/*
+	@ return - returns the time it takes for the caught animation to finish.
+	*/
+	float Caught();
+
 private:
 	void MoveForward(float value);
 	void MoveRight(float value);
@@ -32,5 +37,10 @@ private:
 
 	UPROPERTY(VisibleDefaultsOnly, Category = "Player")
 	class UCameraComponent* playerEye;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Player")
+	UAnimMontage* CaughtMontage;
+
+	
 	
 };

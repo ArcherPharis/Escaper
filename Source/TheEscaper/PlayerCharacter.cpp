@@ -3,6 +3,7 @@
 
 #include "PlayerCharacter.h"
 #include "Camera/CameraComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 APlayerCharacter::APlayerCharacter()
 {
@@ -57,3 +58,12 @@ void APlayerCharacter::MoveForward(float value)
 {
 	AddMovementInput(GetActorForwardVector() * value);
 }
+
+float APlayerCharacter::Caught()
+{
+	GetCharacterMovement()->MaxWalkSpeed = 0;
+	float duration = GetMesh()->GetAnimInstance()->Montage_Play(CaughtMontage);
+	return duration;
+}
+
+

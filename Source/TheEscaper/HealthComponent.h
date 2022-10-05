@@ -18,7 +18,10 @@ class THEESCAPER_API UHealthComponent : public UActorComponent
 public:	
 	// Sets default values for this component's properties
 	UHealthComponent();
+
+	UPROPERTY(BlueprintAssignable, Category = "Health")
 	FOnHealthChange OnHealthChanged;
+	UPROPERTY(BlueprintAssignable, Category = "Health")
 	FOnHealthEmpty OnHealthEmpty;
 
 protected:

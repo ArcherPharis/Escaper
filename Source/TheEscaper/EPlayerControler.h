@@ -18,6 +18,9 @@ public:
 	virtual void OnPossess(APawn* newPawn) override;
 	AEPlayerControler();
 
+	void Caught();
+
+
 
 private:
 	class APlayerCharacter* playerCharacter;
@@ -29,8 +32,17 @@ private:
 	TSubclassOf<class UInGameUI> inGameUIClass;
 
 	UInGameUI* inGameUI;
+	FTimerHandle CaughtTimerHandle;
+
+	void CaughtFinished();
+
+	bool bIsCaught;
 
 	UFUNCTION()
 	void PawnDead();
+
+
+
+	
 	
 };
