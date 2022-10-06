@@ -4,6 +4,7 @@
 #include "EPlayerControler.h"
 #include "PlayerCharacter.h"
 #include "HealthComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "InGameUI.h"
 
 void AEPlayerControler::OnPossess(APawn* newPawn) //happens every time something posseses, not just at start.
@@ -63,4 +64,12 @@ void AEPlayerControler::Caught()
 	SetInputMode(FInputModeUIOnly());
 	GetWorldTimerManager().SetTimer(CaughtTimerHandle, this, &AEPlayerControler:: CaughtFinished, caughtDuration, false);
 	inGameUI->SwitchToGameOverMenu();
+}
+
+void AEPlayerControler::PauseGame()
+{
+	inGameUI->SwitchToPauseMenu();
+	SetInputMode(FInputModeUIOnly());
+	SetShowMouseCursor(true);
+	UGameplayStatics::SetGamePaused(this, true);
 }

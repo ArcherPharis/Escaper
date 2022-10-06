@@ -20,6 +20,8 @@ public:
 
 	void Caught();
 
+	void PauseGame();
+
 
 
 private:

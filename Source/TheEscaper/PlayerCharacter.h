@@ -33,6 +33,7 @@ private:
 	void MoveRight(float value);
 	void Turn(float value);
 	void LookUp(float value);
+	void Pause();
 	
 
 	UPROPERTY(VisibleDefaultsOnly, Category = "Player")
@@ -40,6 +41,8 @@ private:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Player")
 	UAnimMontage* CaughtMontage;
+
+	class AEPlayerControler* playerController;
 
 	
 	

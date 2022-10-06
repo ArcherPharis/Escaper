@@ -4,6 +4,9 @@
 #include "PlayerCharacter.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "EPlayerControler.h"
+#include "Kismet/GameplayStatics.h"
+
 
 APlayerCharacter::APlayerCharacter()
 {
@@ -25,6 +28,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAction("NextWeapon", IE_Pressed, this, &APlayerCharacter::NextWeapon);
 	PlayerInputComponent->BindAction("PreviousWeapon", IE_Pressed, this, &APlayerCharacter::PrevWeapon);
 	PlayerInputComponent->BindAction("Reload", IE_Pressed, this, &APlayerCharacter::Reload);
+	PlayerInputComponent->BindAction("Pause", IE_Pressed, this, &APlayerCharacter::Pause);
 
 
 
@@ -35,6 +39,7 @@ void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	GetMesh()->AttachToComponent(playerEye, FAttachmentTransformRules::KeepWorldTransform);
+	playerController = Cast<AEPlayerControler>(UGameplayStatics::GetPlayerController(this, 0));
 
 }
 
@@ -52,6 +57,11 @@ void APlayerCharacter::Turn(float value)
 void APlayerCharacter::LookUp(float value)
 {
 	AddControllerPitchInput(value);
+}
+
+void APlayerCharacter::Pause()
+{
+	playerController->PauseGame();
 }
 
 void APlayerCharacter::MoveForward(float value)

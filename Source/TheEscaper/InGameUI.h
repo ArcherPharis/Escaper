@@ -25,6 +25,10 @@ public:
 	void WeaponSwitched(class AWeapon* weapon);
 
 	void SwitchToGameOverMenu();
+	void SwitchToPauseMenu();
+
+protected:
+	virtual void NativeConstruct() override;
 
 private:
 	UPROPERTY(meta = (BindWidget))
@@ -35,5 +39,36 @@ private:
 
 	UPROPERTY(meta = (BindWidget))
 	class UListView* weaponList;
+
+	UPROPERTY(meta = (BindWidget))
+	class UGameMenuCanvas* inGameCanvas;
+
+	UPROPERTY(meta = (BindWidget))
+	class UGameMenuCanvas* pauseCanvas;
+
+	UPROPERTY(meta = (BindWidget))
+	class UGameMenuCanvas* gameOverCanvas;
+
+	UPROPERTY(meta = (BindWidget))
+	class UWidgetSwitcher* UISwitcher;
+
+	UPROPERTY(meta = (bindWidget))
+	class UButton* continueButton;
+
+	UPROPERTY(meta = (bindWidget))
+	class UButton* restartButton;
+
+	UPROPERTY(meta = (bindWidget))
+	class UButton* quitButton;
+
+	UFUNCTION()
+	void Resume();
+	UFUNCTION()
+	void Restart();
+	UFUNCTION()
+	void Quit();
+
+
+	
 	
 };
