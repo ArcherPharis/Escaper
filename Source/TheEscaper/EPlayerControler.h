@@ -22,10 +22,17 @@ public:
 
 	void PauseGame();
 
+	UFUNCTION()
+	void QuitGame();
+
+
 
 
 private:
 	class APlayerCharacter* playerCharacter;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Player")
+	float afterDeathMenuTime = 3.f;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Player")
 	TSubclassOf<APawn> deathPawnClass;
@@ -35,13 +42,21 @@ private:
 
 	UInGameUI* inGameUI;
 	FTimerHandle CaughtTimerHandle;
+	FTimerHandle DeathTimerHandle;
 
 	void CaughtFinished();
+	void AfterPlayerDeath();
 
 	bool bIsCaught;
 
 	UFUNCTION()
 	void PawnDead();
+
+	UFUNCTION()
+	void ResumeGame();
+
+	UFUNCTION()
+	void RestartGame();
 
 
 

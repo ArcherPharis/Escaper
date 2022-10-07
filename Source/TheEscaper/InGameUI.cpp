@@ -9,8 +9,8 @@
 #include "GameMenuCanvas.h"
 #include "Components/Button.h"
 #include "Components/WidgetSwitcher.h"
-#include "Kismet/GameplayStatics.h"
-#include "Blueprint/WidgetBlueprintLibrary.h"
+//#include "Blueprint/WidgetBlueprintLibrary.h"
+
 
 void UInGameUI::NativeConstruct()
 {
@@ -18,27 +18,28 @@ void UInGameUI::NativeConstruct()
 	continueButton->OnReleased.AddDynamic(this, &UInGameUI::Resume);
 	restartButton->OnReleased.AddDynamic(this, &UInGameUI::Restart);
 	quitButton->OnReleased.AddDynamic(this, &UInGameUI::Quit);
+	restartButtonGameOver->OnReleased.AddDynamic(this, &UInGameUI::Restart);
+	quitButtonGameOver->OnReleased.AddDynamic(this, &UInGameUI::Quit);
+
 
 }
 
 void UInGameUI::Resume()
 {
-	//TODO, just broadcast an event that playercontroller recieves and executes all this.
-	UGameplayStatics::SetGamePaused(this, false);
-	UWidgetBlueprintLibrary::SetInputMode_GameOnly(UGameplayStatics::GetPlayerController(this, 0));
-	UGameplayStatics::GetPlayerController(this, 0)->SetShowMouseCursor(false);
+
+	OnGameResumed.Broadcast();
 	UISwitcher->SetActiveWidgetIndex(inGameCanvas->GetCanvasIndex());
+	
 }
 
 void UInGameUI::Restart()
 {
-	UGameplayStatics::GetPlayerController(this, 0)->RestartLevel();
-	UWidgetBlueprintLibrary::SetInputMode_GameOnly(UGameplayStatics::GetPlayerController(this, 0));
+	OnGameRestarted.Broadcast();
 }
 
 void UInGameUI::Quit()
 {
-	UGameplayStatics::GetPlayerController(this, 0)->ConsoleCommand("quit");
+	OnGameQuit.Broadcast();
 }
 
 
@@ -77,6 +78,11 @@ void UInGameUI::SwitchToGameOverMenu()
 void UInGameUI::SwitchToPauseMenu()
 {
 	UISwitcher->SetActiveWidgetIndex(pauseCanvas->GetCanvasIndex());
+}
+
+void UInGameUI::HideHUD()
+{
+	UISwitcher->GetChildAt(inGameCanvas->GetCanvasIndex())->SetVisibility(ESlateVisibility::Hidden);
 }
 
 

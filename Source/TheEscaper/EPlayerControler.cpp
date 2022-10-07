@@ -23,6 +23,11 @@ void AEPlayerControler::OnPossess(APawn* newPawn) //happens every time something
 			playerCharacter->GetHealthComp()->OnHealthChanged.AddDynamic(inGameUI, &UInGameUI::UpdateHealth);
 			playerCharacter->OnWeaponGiven.AddDynamic(inGameUI, &UInGameUI::NewWeaponGiven);
 			playerCharacter->OnWeaponSwitched.AddDynamic(inGameUI, &UInGameUI::WeaponSwitched);
+			inGameUI->OnGameResumed.AddDynamic(this, &AEPlayerControler::ResumeGame);
+			inGameUI->OnGameRestarted.AddDynamic(this, &AEPlayerControler::RestartGame);
+			inGameUI->OnGameQuit.AddDynamic(this, &AEPlayerControler::QuitGame);
+
+
 
 		}
 	}
@@ -44,12 +49,35 @@ void AEPlayerControler::CaughtFinished()
 	inGameUI->SwitchToGameOverMenu();
 }
 
+void AEPlayerControler::AfterPlayerDeath()
+{
+	inGameUI->SwitchToGameOverMenu();
+}
+
 void AEPlayerControler::PawnDead()
 {
+	GetWorldTimerManager().SetTimer(DeathTimerHandle, this, &AEPlayerControler::AfterPlayerDeath, afterDeathMenuTime, false);
+	inGameUI->HideHUD();
 	playerCharacter->SetActorHiddenInGame(true);
 	SetInputMode(FInputModeUIOnly());
+	SetShowMouseCursor(true);
 	APawn* DeathPawn = GetWorld()->SpawnActor<APawn>(deathPawnClass, playerCharacter->GetTransform());
 	Possess(DeathPawn);
+
+}
+
+void AEPlayerControler::ResumeGame()
+{
+	
+	UGameplayStatics::SetGamePaused(this, false);
+	SetInputMode(FInputModeGameOnly());
+	SetShowMouseCursor(false);
+}
+
+void AEPlayerControler::RestartGame()
+{
+	RestartLevel();
+	SetInputMode(FInputModeGameOnly());
 
 }
 
@@ -72,4 +100,10 @@ void AEPlayerControler::PauseGame()
 	SetInputMode(FInputModeUIOnly());
 	SetShowMouseCursor(true);
 	UGameplayStatics::SetGamePaused(this, true);
+}
+
+void AEPlayerControler::QuitGame()
+{
+	UGameplayStatics::GetPlayerController(this, 0)->ConsoleCommand("quit");
+
 }

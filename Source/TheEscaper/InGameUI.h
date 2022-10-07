@@ -6,6 +6,12 @@
 #include "Blueprint/UserWidget.h"
 #include "InGameUI.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnGameResumed);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnGameRestarted);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnGameQuit);
+
+
+
 /**
  * 
  */
@@ -26,6 +32,12 @@ public:
 
 	void SwitchToGameOverMenu();
 	void SwitchToPauseMenu();
+
+	void HideHUD();
+
+	FOnGameResumed OnGameResumed;
+	FOnGameRestarted OnGameRestarted;
+	FOnGameQuit OnGameQuit;
 
 protected:
 	virtual void NativeConstruct() override;
@@ -60,6 +72,12 @@ private:
 
 	UPROPERTY(meta = (bindWidget))
 	class UButton* quitButton;
+
+	UPROPERTY(meta = (bindWidget))
+	class UButton* restartButtonGameOver;
+
+	UPROPERTY(meta = (bindWidget))
+	class UButton* quitButtonGameOver;
 
 	UFUNCTION()
 	void Resume();
