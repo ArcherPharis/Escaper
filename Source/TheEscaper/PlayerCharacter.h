@@ -28,6 +28,8 @@ public:
 	*/
 	float Caught();
 
+
+
 private:
 	void MoveForward(float value);
 	void MoveRight(float value);
@@ -41,6 +43,7 @@ private:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Player")
 	UAnimMontage* CaughtMontage;
+
 
 	class AEPlayerControler* playerController;
 

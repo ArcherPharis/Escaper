@@ -25,5 +25,8 @@ private:
 
 	virtual void OnHealthChange(float val, float delta, float max) override;
 	virtual void OnDeathStart() override;
+
+	UPROPERTY(EditAnywhere, Category = "Patrolling")
+	class UPatrollingComponent* PatrollingPoint;
 	
 };

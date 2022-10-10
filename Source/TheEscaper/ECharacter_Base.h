@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GenericTeamAgentInterface.h"
 #include "GameFramework/Character.h"
 #include "ECharacter_Base.generated.h"
 
@@ -18,7 +19,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnWeaponSwitched, AWeapon*, weapon)
 
 
 UCLASS()
-class THEESCAPER_API AECharacter_Base : public ACharacter
+class THEESCAPER_API AECharacter_Base : public ACharacter, public IGenericTeamAgentInterface
 {
 	GENERATED_BODY()
 
@@ -35,6 +36,8 @@ public:
 	FOnWeaponGiven OnWeaponGiven;
 	FOnWeaponSwitched OnWeaponSwitched;
 
+	void Attack();
+
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -49,10 +52,12 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	virtual FGenericTeamId GetGenericTeamId() const override { return TeamID; }
+
 
 
 protected:
-	void Attack();
+	
 
 	void PrevWeapon();
 	void NextWeapon();
@@ -61,6 +66,10 @@ protected:
 	void Reload();
 
 private:
+
+
+	UPROPERTY(EditDefaultsOnly, Category = "Team")
+	FGenericTeamId TeamID;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Animaiton")
 	UAnimMontage* WeaponSwitchMontage;

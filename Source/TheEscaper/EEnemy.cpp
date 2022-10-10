@@ -4,11 +4,13 @@
 #include "EEnemy.h"
 #include "Components/WidgetComponent.h"
 #include "ValueGauge.h"
+#include "PatrollingComponent.h"
 
 AEEnemy::AEEnemy()
 {
 	healthBarWidgetComp = CreateDefaultSubobject<UWidgetComponent>("HealthBarComp");
 	healthBarWidgetComp->SetupAttachment(GetRootComponent());
+	PatrollingPoint = CreateDefaultSubobject<UPatrollingComponent>(TEXT("PatrollingComp"));
 }
 
 void AEEnemy::BeginPlay()
