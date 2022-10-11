@@ -24,17 +24,34 @@ void AEAControllerBase::BeginPlay()
 	RunBehaviorTree(behviorTree);
 }
 
+void AEAControllerBase::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+	if (SensedActor)
+	{
+		//GetBlackboardComponent()->GetValueAsObject(TargetBlackboardKeyName);
+		GetBlackboardComponent()->SetValueAsVector(TEXT("LastKnownPlayerLocation"), SensedActor->GetActorLocation());
+
+	}
+	else
+	{
+		GetBlackboardComponent()->ClearValue(TargetBlackboardKeyName);
+	}
+}
+
 void AEAControllerBase::OnPerceptionUpdated(AActor* Actor, FAIStimulus Stimulus)
 {
 	if (Stimulus.WasSuccessfullySensed())
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Seeing: %s"),* Actor->GetName());
 		GetBlackboardComponent()->SetValueAsObject(TargetBlackboardKeyName, Actor);
+		SensedActor = Actor;
 	}
 	else
 	{
 		UE_LOG(LogTemp, Warning, TEXT("He gone: %s"), *Actor->GetName());
 		GetBlackboardComponent()->ClearValue(TargetBlackboardKeyName);
+		SensedActor = nullptr;
 		//if ai loses track of you, ai goes to the last place it sees you first, wait for 2 seconds and then if still not seeing you,
 		// go back
 

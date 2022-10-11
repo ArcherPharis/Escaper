@@ -20,6 +20,8 @@ public:
 
 	virtual void BeginPlay() override;
 
+	virtual void Tick(float DeltaSeconds) override;
+
 private:
 	UPROPERTY(VisibleDefaultsOnly, Category = "AI")
 	class UAIPerceptionComponent* PerceptionComp;
@@ -38,5 +40,7 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "AI")
 	UBehaviorTree* behviorTree;
+
+	AActor* SensedActor;
 	
 };
