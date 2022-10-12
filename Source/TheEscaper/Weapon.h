@@ -25,6 +25,7 @@ protected:
 	class UStaticMeshComponent* WeaponMesh;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Animation")
+	TMap<USkeletalMesh*, UAnimMontage*> ReloadAnimMap;
 	UAnimMontage* ReloadMontage;
 
 	virtual bool CanAttack() const;
@@ -62,6 +63,8 @@ public:
 	FORCEINLINE UTexture2D* GetCrossHairTexture() const { return crossHairTexture; }
 	FORCEINLINE UTexture2D* GetWeaponIcon() const { return weaponIconTexture; }
 
+	UStaticMesh* GetMesh() const { return WeaponMesh->GetStaticMesh(); }
+
 
 	/*
 	 @ return - false if not firearm
@@ -76,10 +79,13 @@ private:
 	float damage = 10.f;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Animation")
+	TMap<USkeletalMesh*, UAnimSequence*> IdleAnimMap;
 	UAnimSequence* IdleAnim;
 	UPROPERTY(EditDefaultsOnly, Category = "Animation")
+	TMap<USkeletalMesh*, UAnimSequence*> WalkAnimMap;
 	UAnimSequence* WalkAnim;
 	UPROPERTY(EditDefaultsOnly, Category = "Animation")
+	TMap<USkeletalMesh*, UAnimMontage*> AttackAnimMap;
 	UAnimMontage* AttackMontage;
 
 

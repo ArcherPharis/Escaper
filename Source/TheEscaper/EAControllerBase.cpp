@@ -27,16 +27,16 @@ void AEAControllerBase::BeginPlay()
 void AEAControllerBase::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
-	if (SensedActor)
-	{
-		//GetBlackboardComponent()->GetValueAsObject(TargetBlackboardKeyName);
-		GetBlackboardComponent()->SetValueAsVector(TEXT("LastKnownPlayerLocation"), SensedActor->GetActorLocation());
+	//if (SensedActor)
+	//{
+	//	//GetBlackboardComponent()->GetValueAsObject(TargetBlackboardKeyName);
+	//	GetBlackboardComponent()->SetValueAsVector(TEXT("LastKnownPlayerLocation"), SensedActor->GetActorLocation());
 
-	}
-	else
-	{
-		GetBlackboardComponent()->ClearValue(TargetBlackboardKeyName);
-	}
+	//}
+	//else
+	//{
+	//	GetBlackboardComponent()->ClearValue(TargetBlackboardKeyName);
+	//}
 }
 
 void AEAControllerBase::OnPerceptionUpdated(AActor* Actor, FAIStimulus Stimulus)
@@ -45,13 +45,20 @@ void AEAControllerBase::OnPerceptionUpdated(AActor* Actor, FAIStimulus Stimulus)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Seeing: %s"),* Actor->GetName());
 		GetBlackboardComponent()->SetValueAsObject(TargetBlackboardKeyName, Actor);
-		SensedActor = Actor;
 	}
 	else
 	{
-		UE_LOG(LogTemp, Warning, TEXT("He gone: %s"), *Actor->GetName());
-		GetBlackboardComponent()->ClearValue(TargetBlackboardKeyName);
-		SensedActor = nullptr;
+		const FActorPerceptionInfo* perceptionInfo = PerceptionComp->GetActorInfo(*Actor);
+
+		if (!perceptionInfo->HasAnyCurrentStimulus())
+		{
+			UE_LOG(LogTemp, Warning, TEXT("He gone: %s"), *Actor->GetName());
+			GetBlackboardComponent()->ClearValue(TargetBlackboardKeyName);
+			GetBlackboardComponent()->SetValueAsVector(LastSeenKeyName, Actor->GetActorLocation());
+		}
+
+
+		
 		//if ai loses track of you, ai goes to the last place it sees you first, wait for 2 seconds and then if still not seeing you,
 		// go back
 
