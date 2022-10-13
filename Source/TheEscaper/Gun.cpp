@@ -28,6 +28,7 @@ void AGun::AttackPointAnimNotify()
 	}
 }
 
+
 void AGun::Reload()
 {
 	if (IsReloading() || ammoInClip >= clipCapacity) return;
@@ -72,4 +73,10 @@ bool AGun::CanAttack() const
 	if (IsReloading() || ammoInClip == 0) return false;
 
 	return Super::CanAttack();
+}
+
+void AGun::GiveAmmoAsPickup()
+{
+	ammoInventory += ammoToGive;
+	OnAmmoUpdated.Broadcast(ammoInClip, ammoInventory);
 }

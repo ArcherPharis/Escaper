@@ -5,6 +5,7 @@
 #include "Components/WidgetComponent.h"
 #include "ValueGauge.h"
 #include "PatrollingComponent.h"
+#include "WeaponPickup.h"
 
 AEEnemy::AEEnemy()
 {
@@ -17,6 +18,7 @@ void AEEnemy::BeginPlay()
 {
 	Super::BeginPlay();
 	 valueGauge = Cast<UValueGauge>( healthBarWidgetComp->GetUserWidgetObject());
+	 chanceToDrop = FMath::Clamp(chanceToDrop, 0, 100);
 }
 
 void AEEnemy::OnHealthChange(float val, float delta, float max)
@@ -29,4 +31,21 @@ void AEEnemy::OnHealthChange(float val, float delta, float max)
 
 void AEEnemy::OnDeathStart()
 {
+	int randomNum = FMath::RandRange(1, 100);
+
+	if (randomNum <= chanceToDrop)
+	{
+		if (weaponPickUp)
+		{
+			AWeaponPickup* weaponPU = GetWorld()->SpawnActor<AWeaponPickup>(weaponPickUp);
+			weaponPU->SetActorLocation(GetActorLocation());
+			weaponPU->SetRandomWeapon();
+		}
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("no item for you"));
+	}
+
+	
 }

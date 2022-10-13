@@ -2,6 +2,7 @@
 #include "Components/SceneComponent.h"
 #include "Components/StaticMeshComponent.h"
 
+
 // Sets default values
 AWeapon::AWeapon()
 {
@@ -71,6 +72,11 @@ void AWeapon::PutInHand()
 {
 	SetActorHiddenInGame(false);
 }
+
+void AWeapon::GiveAmmoAsPickup()
+{
+}
+
 
 void AWeapon::GetAnims(UAnimSequence*& Idle, UAnimSequence*& Walk, UAnimMontage*& Attack) const
 {

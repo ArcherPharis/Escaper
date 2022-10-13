@@ -11,6 +11,13 @@ AWeaponPickup::AWeaponPickup()
 	meshComp->SetupAttachment(GetRootComponent());
 }
 
+void AWeaponPickup::SetRandomWeapon()
+{
+	int randomNum = FMath::RandRange(0, weaponClasses.Num() - 1);
+	weaponClass = weaponClasses[randomNum];
+	meshComp->SetStaticMesh(weaponClass.GetDefaultObject()->GetMesh());
+}
+
 void AWeaponPickup::BeginPlay()
 {
 	Super::BeginPlay();

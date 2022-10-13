@@ -18,8 +18,11 @@ public:
 
 	AWeaponPickup();
 
+	void SetRandomWeapon();
+
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<class AWeapon> weaponClass;
+
 
 
 	virtual void BeginPlay() override;
@@ -33,6 +36,9 @@ private:
 
 	UPROPERTY(VisibleAnywhere, Category = "Weapon")
 	UStaticMeshComponent* meshComp;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
+	TArray<TSubclassOf<AWeapon>> weaponClasses;
 
 	virtual void OnTriggered(AActor* actor) override;
 	virtual void OnActorLeftTrigger(AActor* actor) override;

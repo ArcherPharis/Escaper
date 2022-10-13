@@ -38,6 +38,8 @@ public:
 
 	void Attack();
 
+	
+
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -77,13 +79,15 @@ private:
 	FTimerHandle WeaponSwitchingHandle;
 	void WeaponSwitchTimePoint();
 
+	bool HasWeaponOfType(TSubclassOf<AWeapon> weaponClass) const;
+
 	UPROPERTY()
 	TArray<AWeapon*> weapons;
 
 	AWeapon* currentWeapon;
 	int weaponIndex = -1;
 
-	bool HasWeaponOfType(TSubclassOf<AWeapon> weaponClass) const;
+	
 
 	void EquipWeapon(int index);
 

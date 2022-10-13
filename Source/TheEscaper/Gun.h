@@ -22,6 +22,9 @@ protected:
 
 	FName GetMuzzleSocketName() const { return MuzzleSocketName; }
 
+
+
+
 private:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
@@ -33,7 +36,7 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
 	int clipCapacity = 7;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
+	UPROPERTY(EditAnywhere, Category = "Weapon")
 	int ammoInventory = 30;
 
 
@@ -42,11 +45,15 @@ private:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
 	bool bIsLauncher = false;
+
+	UPROPERTY(EditAnywhere, Category = "As Pickup")
+	int ammoToGive = 7;
 	
 
 	virtual void Reload() override;
 	bool IsReloading() const;
 	virtual bool CanAttack() const override;
+	virtual void GiveAmmoAsPickup() override;
 	FTimerHandle ReloadTimerHandle;
 
 	void ReloadTimePoint();

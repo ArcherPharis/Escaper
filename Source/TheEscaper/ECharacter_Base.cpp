@@ -37,7 +37,13 @@ void AECharacter_Base::GiveWeapon(TSubclassOf<AWeapon> weaponClass)
 {
 	if (HasWeaponOfType(weaponClass))
 	{
-		//TODO: maybe add ammo here
+		for (int i = 0; i < weapons.Num(); i++)
+		{
+			if (weaponClass == weapons[i]->GetClass())
+			{
+				weapons[i]->GiveAmmoAsPickup();
+			}
+		}
 		return;
 	}
 

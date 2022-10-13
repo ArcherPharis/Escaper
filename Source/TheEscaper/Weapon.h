@@ -46,6 +46,8 @@ public:
 	virtual void PutInInventory();
 	virtual void PutInHand();
 
+	virtual void GiveAmmoAsPickup();
+
 
 	UFUNCTION(BlueprintPure, Category = "Animation")
 	void GetAnims(UAnimSequence*& Idle, UAnimSequence*& Walk, UAnimMontage*& Attack) const;
@@ -99,6 +101,8 @@ private:
 	UTexture2D* weaponIconTexture;
 
 	USkeletalMeshComponent* OwnerSkeletalMesh;
+
+
 
 	UPROPERTY(EditAnywhere, Category = "Weapon")
 	float fireRate = 1.f;
