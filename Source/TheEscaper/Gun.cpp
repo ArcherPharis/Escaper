@@ -6,7 +6,6 @@ void AGun::AttackPointAnimNotify()
 {
 	Super::AttackPointAnimNotify();
 
-	if (!bIsLauncher) {
 		FHitResult result;
 		FVector ownerViewLoc;
 		FRotator ownerViewRot;
@@ -18,14 +17,9 @@ void AGun::AttackPointAnimNotify()
 			UAISense_Damage::ReportDamageEvent(this, result.GetActor(), GetOwner(), GetWeaponDamage(), GetActorLocation(), result.ImpactPoint);
 			BP_OnBulletHit(result);
 		}
-	}
 
-	ammoInClip--;
-	OnAmmoUpdated.Broadcast(ammoInClip, ammoInventory);
-	if (ammoInClip == 0 && ammoInventory != 0)
-	{
-		Reload();
-	}
+
+		DecrementAmmo();
 }
 
 
@@ -66,6 +60,16 @@ bool AGun::GetAmmoStatus(int& clipAmmo, int& inventoryAmmo) const
 	clipAmmo = ammoInClip;
 	inventoryAmmo = ammoInventory;
 	return true;
+}
+
+void AGun::DecrementAmmo()
+{
+	ammoInClip--;
+	OnAmmoUpdated.Broadcast(ammoInClip, ammoInventory);
+	if (ammoInClip == 0 && ammoInventory != 0)
+	{
+		Reload();
+	}
 }
 
 bool AGun::CanAttack() const

@@ -13,7 +13,6 @@ ALauncher::ALauncher()
 void ALauncher::AttackPointAnimNotify()
 {
 	
-	AGun::AttackPointAnimNotify();
 
 	FVector location = WeaponMesh->GetSocketLocation(GetMuzzleSocketName());
 	FRotator rotation = WeaponMesh->GetSocketRotation(GetMuzzleSocketName());
@@ -25,7 +24,9 @@ void ALauncher::AttackPointAnimNotify()
 	//this won't trigger the OnHit event..not sure why. Too fast? Simulate Physics?
 	//projectile->GetMesh()->SetSimulatePhysics(true);
 	//projectile->GetMesh()->AddImpulse(projectile->GetActorForwardVector() * projectileRange, NAME_None, false);
-	projectile->SetOwner(this);
+	projectile->SetOwner(GetOwner());
+
+	DecrementAmmo();
 
 	
 }

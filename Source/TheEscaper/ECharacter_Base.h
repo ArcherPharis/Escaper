@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GenericTeamAgentInterface.h"
 #include "GameFramework/Character.h"
+#include "EnemyAIInterface.h"
 #include "ECharacter_Base.generated.h"
 
 #define ECC_Character ECC_GameTraceChannel1
@@ -19,7 +20,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnWeaponSwitched, AWeapon*, weapon)
 
 
 UCLASS()
-class THEESCAPER_API AECharacter_Base : public ACharacter, public IGenericTeamAgentInterface
+class THEESCAPER_API AECharacter_Base : public ACharacter, public IGenericTeamAgentInterface, public IEnemyAIInterface
 {
 	GENERATED_BODY()
 

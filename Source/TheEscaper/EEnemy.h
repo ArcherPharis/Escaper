@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "ECharacter_Base.h"
+#include "EnemyAIInterface.h"
 #include "EEnemy.generated.h"
 
 /**

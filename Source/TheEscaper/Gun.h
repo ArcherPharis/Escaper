@@ -22,7 +22,7 @@ protected:
 
 	FName GetMuzzleSocketName() const { return MuzzleSocketName; }
 
-
+	void DecrementAmmo();
 
 
 private:
@@ -43,8 +43,6 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
 	float shootRange = 10000.f;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
-	bool bIsLauncher = false;
 
 	UPROPERTY(EditAnywhere, Category = "As Pickup")
 	int ammoToGive = 7;
@@ -59,4 +57,6 @@ private:
 	void ReloadTimePoint();
 	virtual void PutInInventory() override;
 	virtual bool GetAmmoStatus(int& clipAmmo, int& inventoryAmmo) const override;
+
+	
 };

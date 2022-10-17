@@ -36,8 +36,12 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = "Projectile")
 	class UProjectileMovementComponent* ProjectileMovementComponent;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Projectile")
+	float splashRadius = 200;
+
+	float damage = 80;
+
 	UFUNCTION()
 	void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 
-	float damage = 80;
 };

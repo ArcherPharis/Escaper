@@ -5,13 +5,21 @@
 #include "EAControllerBase.h"
 #include "BehaviorTree/BehaviorTreeComponent.h"
 #include "ECharacter_Base.h"
+#include "EnemyAIInterface.h"
 
 EBTNodeResult::Type UBTTask_Attack::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
 	AAIController* AIC = OwnerComp.GetAIOwner();
-	AECharacter_Base* character = AIC->GetPawn<AECharacter_Base>();
-	character->Attack();
+	IEnemyAIInterface* AIInterface = AIC->GetPawn<IEnemyAIInterface>();
+	
 
-	return EBTNodeResult::Succeeded;
+	if (AIInterface)
+	{
+		AIInterface->Attack();
+		return EBTNodeResult::Succeeded;
+	}
+	return EBTNodeResult::Failed;
+
+	
 
 }
