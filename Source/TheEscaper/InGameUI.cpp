@@ -20,6 +20,9 @@ void UInGameUI::NativeConstruct()
 	quitButton->OnReleased.AddDynamic(this, &UInGameUI::Quit);
 	restartButtonGameOver->OnReleased.AddDynamic(this, &UInGameUI::Restart);
 	quitButtonGameOver->OnReleased.AddDynamic(this, &UInGameUI::Quit);
+	restartButtonWin->OnReleased.AddDynamic(this, &UInGameUI::Restart);
+	quitButtonWin->OnReleased.AddDynamic(this, &UInGameUI::Quit);
+
 
 
 }
@@ -78,6 +81,12 @@ void UInGameUI::SwitchToGameOverMenu()
 void UInGameUI::SwitchToPauseMenu()
 {
 	UISwitcher->SetActiveWidgetIndex(pauseCanvas->GetCanvasIndex());
+}
+
+void UInGameUI::SwitchToCongratsMenu()
+{
+	UISwitcher->SetActiveWidget(winCanvas);
+
 }
 
 void UInGameUI::HideHUD()

@@ -7,6 +7,8 @@
 #include "EnemyAIInterface.h"
 #include "Boss.generated.h"
 
+
+
 UCLASS()
 class THEESCAPER_API ABoss : public APawn, public IEnemyAIInterface
 {
@@ -20,6 +22,7 @@ class THEESCAPER_API ABoss : public APawn, public IEnemyAIInterface
 public:
 	// Sets default values for this pawn's properties
 	ABoss();
+
 
 	bool LookAtTargetTick(AActor* Target, float deltaTime);
 
@@ -79,11 +82,24 @@ private:
 
 	class UValueGauge* HealthBar;
 
+	TArray<class AEEnemy*> enemies;
+
 	UFUNCTION()
 	void HealthUpdated(float health, float delta, float maxHealth);
 
 	UFUNCTION()
 	void Die();
 
+	UPROPERTY(EditDefaultsOnly, Category = "Boss")
+	TSubclassOf<AEEnemy> minionToSpawnClass;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Boss")
+	float enemySpawnRate = 5.f;
+
+	void SpawnEnemies();
+	void RelayDeath();
+
 	FTimerHandle coolDownTimer;
+	FTimerHandle enemySpawnTimer;
+
 };

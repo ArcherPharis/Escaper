@@ -25,6 +25,9 @@ public:
 	UFUNCTION()
 	void QuitGame();
 
+	void BossDefeated();
+	void DelayPause();
+
 
 
 
@@ -40,9 +43,14 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Player")
 	TSubclassOf<class UInGameUI> inGameUIClass;
 
+
 	UInGameUI* inGameUI;
 	FTimerHandle CaughtTimerHandle;
 	FTimerHandle DeathTimerHandle;
+	FTimerHandle PauseTimerHandle;
+
+	float pauseDelay = 5.f;
+
 
 	void CaughtFinished();
 	void AfterPlayerDeath();

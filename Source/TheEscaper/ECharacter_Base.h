@@ -71,7 +71,7 @@ protected:
 private:
 
 
-	UPROPERTY(EditDefaultsOnly, Category = "Team")
+	UPROPERTY(EditAnywhere, Category = "Team")
 	FGenericTeamId TeamID;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Animaiton")

@@ -7,6 +7,10 @@
 #include "Perception/AISenseConfig_Damage.h"
 #include "Perception/AIPerceptionTypes.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "ECharacter_Base.h"
+#include "Kismet/GameplayStatics.h"
+
+
 
 AEAControllerBase::AEAControllerBase()
 {
@@ -18,25 +22,62 @@ AEAControllerBase::AEAControllerBase()
 	PerceptionComp->OnTargetPerceptionUpdated.AddDynamic(this, &AEAControllerBase::OnPerceptionUpdated);
 }
 
+ETeamAttitude::Type AEAControllerBase::GetTeamAttitudeTowards(const AActor& Other) const
+{
+	
+	const APawn* pawn = Cast<APawn>(&Other);
+
+	if (!pawn) 
+		return ETeamAttitude::Neutral;
+
+	auto pTI = Cast<IGenericTeamAgentInterface>(&Other);
+	class IGenericTeamAgentInterface* bTI = Cast<IGenericTeamAgentInterface>(pawn->GetController());
+	if (bTI == nullptr && pTI == nullptr)
+		return ETeamAttitude::Neutral;
+
+
+	FGenericTeamId otherID = NULL;
+	if (bTI != nullptr)
+	{
+		otherID = bTI->GetGenericTeamId();
+	}
+	else if (pTI != nullptr)
+	{
+		otherID = pTI->GetGenericTeamId();
+	}
+
+	if (otherID == 20)
+	{
+		return ETeamAttitude::Neutral;
+	}
+	else if (otherID == TeamID)
+	{
+		return ETeamAttitude::Friendly;
+	}
+	else
+	{
+		return ETeamAttitude::Hostile;
+	}
+
+
+}
+
 void AEAControllerBase::BeginPlay()
 {
 	Super::BeginPlay();
 	RunBehaviorTree(behviorTree);
+	GetBlackboardComponent()->SetValueAsObject(PlayerKeyName, UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
+	AECharacter_Base* chara = Cast<AECharacter_Base>(GetPawn());
+	if (chara)
+	{
+		TeamID = FGenericTeamId(chara->GetGenericTeamId());
+	}
 }
 
 void AEAControllerBase::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
-	//if (SensedActor)
-	//{
-	//	//GetBlackboardComponent()->GetValueAsObject(TargetBlackboardKeyName);
-	//	GetBlackboardComponent()->SetValueAsVector(TEXT("LastKnownPlayerLocation"), SensedActor->GetActorLocation());
 
-	//}
-	//else
-	//{
-	//	GetBlackboardComponent()->ClearValue(TargetBlackboardKeyName);
-	//}
 }
 
 void AEAControllerBase::OnPerceptionUpdated(AActor* Actor, FAIStimulus Stimulus)

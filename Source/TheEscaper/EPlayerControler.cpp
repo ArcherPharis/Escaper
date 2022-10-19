@@ -107,3 +107,20 @@ void AEPlayerControler::QuitGame()
 	UGameplayStatics::GetPlayerController(this, 0)->ConsoleCommand("quit");
 
 }
+
+void AEPlayerControler::BossDefeated()
+{
+
+	GetWorldTimerManager().SetTimer(PauseTimerHandle, this, &AEPlayerControler::DelayPause, pauseDelay, false);
+}
+
+void AEPlayerControler::DelayPause()
+{
+	inGameUI->SwitchToCongratsMenu();
+	SetInputMode(FInputModeUIOnly());
+	SetShowMouseCursor(true);
+	UGameplayStatics::SetGamePaused(this, true);
+
+}
+
+

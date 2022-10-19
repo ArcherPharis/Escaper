@@ -7,8 +7,11 @@
 #include "HealthComponent.h"
 #include "Projectile.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "Kismet/GameplayStatics.h"
 #include "AIController.h"
 #include "BrainComponent.h"
+#include "EPlayerControler.h"
+#include "EEnemy.h"
 
 // Sets default values
 ABoss::ABoss()
@@ -51,6 +54,7 @@ void ABoss::BeginPlay()
 {
 	Super::BeginPlay();
 	HealthBar = Cast<UValueGauge>(HealthBarWidgetComp->GetUserWidgetObject());
+	GetWorldTimerManager().SetTimer(enemySpawnTimer, this, &ABoss::SpawnEnemies, enemySpawnRate, true);
 	
 }
 
@@ -104,7 +108,41 @@ void ABoss::Die()
 		}
 	}
 	OnDead();
+	RelayDeath();
 	Destroy();
+
+}
+
+void ABoss::SpawnEnemies()
+{
+	AEEnemy* enemy;
+	enemy = GetWorld()->SpawnActor<AEEnemy>(minionToSpawnClass, EnemySpawnPoint->GetComponentLocation(), EnemySpawnPoint->GetComponentRotation());
+	enemies.Add(enemy);
+	if(enemy)
+	enemy->SpawnDefaultController();
+
+
+
+}
+
+void ABoss::RelayDeath()
+{
+	AEPlayerControler* playerController = Cast<AEPlayerControler>(UGameplayStatics::GetPlayerController(this, 0));
+	for (AEEnemy* enemy : enemies)
+	{
+		AAIController* AIC = enemy->GetController<AAIController>();
+		if (AIC)
+		{
+			UBrainComponent* braincomp = AIC->GetBrainComponent();
+			if (braincomp)
+			{
+				braincomp->StopLogic("Our master is dead.");
+				UGameplayStatics::ApplyDamage(enemy, 9999999, GetController(), this, nullptr);
+			}
+
+		}
+	}
+	playerController->BossDefeated();
 
 }
 

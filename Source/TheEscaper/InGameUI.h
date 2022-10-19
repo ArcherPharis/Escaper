@@ -32,6 +32,8 @@ public:
 
 	void SwitchToGameOverMenu();
 	void SwitchToPauseMenu();
+	void SwitchToCongratsMenu();
+
 
 	void HideHUD();
 
@@ -62,6 +64,9 @@ private:
 	class UGameMenuCanvas* gameOverCanvas;
 
 	UPROPERTY(meta = (BindWidget))
+	class UGameMenuCanvas* winCanvas;
+
+	UPROPERTY(meta = (BindWidget))
 	class UWidgetSwitcher* UISwitcher;
 
 	UPROPERTY(meta = (bindWidget))
@@ -78,6 +83,12 @@ private:
 
 	UPROPERTY(meta = (bindWidget))
 	class UButton* quitButtonGameOver;
+
+	UPROPERTY(meta = (bindWidget))
+	class UButton* restartButtonWin;
+
+	UPROPERTY(meta = (bindWidget))
+	class UButton* quitButtonWin;
 
 	UFUNCTION()
 	void Resume();

@@ -15,6 +15,10 @@ class THEESCAPER_API AEAControllerBase : public AAIController
 {
 	GENERATED_BODY()
 
+protected:
+	FGenericTeamId TeamID;
+	virtual ETeamAttitude::Type GetTeamAttitudeTowards(const AActor& Other) const override;
+
 public:
 	AEAControllerBase();
 
@@ -39,10 +43,14 @@ private:
 	FName TargetBlackboardKeyName;
 	UPROPERTY(EditDefaultsOnly, Category = "AI")
 	FName LastSeenKeyName;
+	UPROPERTY(EditDefaultsOnly, Category = "AI")
+	FName PlayerKeyName;
 
 	UPROPERTY(EditAnywhere, Category = "AI")
 	UBehaviorTree* behviorTree;
 
 	AActor* SensedActor;
+
+	virtual FGenericTeamId GetGenericTeamId() const override { return TeamID; }
 	
 };

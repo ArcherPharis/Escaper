@@ -9,6 +9,8 @@
 /**
  * 
  */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPickup);
+
 UCLASS()
 class THEESCAPER_API AHealthPickup : public ATriggerable
 {
@@ -17,11 +19,18 @@ class THEESCAPER_API AHealthPickup : public ATriggerable
 public:
 	AHealthPickup();
 
+	FOnPickup onPickup;
+
+	void UnHidePickup();
+
+
 private:
 
 
 	virtual void OnTriggered(AActor* actor) override;
 	virtual void OnActorLeftTrigger(AActor* actor) override;
+
+	void HidePickup();
 
 	UPROPERTY(VisibleAnywhere, Category = "Health")
 	UStaticMeshComponent* meshComp;
