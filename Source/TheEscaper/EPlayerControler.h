@@ -18,6 +18,8 @@ public:
 	virtual void OnPossess(APawn* newPawn) override;
 	AEPlayerControler();
 
+	void SetUIHidden(bool bHideUI);
+
 	void Caught();
 
 	void PauseGame();

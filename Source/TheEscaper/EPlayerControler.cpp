@@ -44,6 +44,17 @@ AEPlayerControler::AEPlayerControler()
 	bAutoManageActiveCameraTarget = false;
 }
 
+void AEPlayerControler::SetUIHidden(bool bHideUI)
+{
+	if (inGameUI)
+	{
+		if (bHideUI)
+			inGameUI->SetVisibility(ESlateVisibility::Hidden);
+		else
+			inGameUI->SetVisibility(ESlateVisibility::Visible);
+	}
+}
+
 void AEPlayerControler::CaughtFinished()
 {
 	inGameUI->SwitchToGameOverMenu();

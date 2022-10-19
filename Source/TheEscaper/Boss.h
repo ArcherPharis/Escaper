@@ -68,6 +68,10 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = "Boss")
 	class UHealthComponent* HealthComp;
 
+
+	UPROPERTY(VisibleAnywhere, Category = "Boss")
+	class UCinematicComponent* cinematicComp;
+
 	UPROPERTY(EditDefaultsOnly, Category = "Boss")
 		float rotationLerpSpeed = 5.f;
 
@@ -101,5 +105,13 @@ private:
 
 	FTimerHandle coolDownTimer;
 	FTimerHandle enemySpawnTimer;
+
+	UFUNCTION()
+	void CinematicStarted();
+
+	UFUNCTION()
+	void CinematicStopped();
+
+	void SetLogicEnabled(bool bIsLogicEnabled);
 
 };

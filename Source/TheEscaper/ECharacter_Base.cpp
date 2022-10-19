@@ -5,6 +5,8 @@
 #include "Components/CapsuleComponent.h"
 #include "Weapon.h"
 #include "HealthComponent.h"
+#include "AIController.h"
+#include "BrainComponent.h"
 
 // Sets default values
 AECharacter_Base::AECharacter_Base()
@@ -186,7 +188,12 @@ void AECharacter_Base::Dead()
 
 void AECharacter_Base::DisableGameplayRelevancy()
 {
+	AAIController* AIC = GetController<AAIController>();
 
+	if (AIC)
+	{
+		AIC->GetBrainComponent()->StopLogic("Dead");
+	}
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }

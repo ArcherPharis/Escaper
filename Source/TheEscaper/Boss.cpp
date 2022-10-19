@@ -12,6 +12,7 @@
 #include "BrainComponent.h"
 #include "EPlayerControler.h"
 #include "EEnemy.h"
+#include"CinematicComponent.h"
 
 // Sets default values
 ABoss::ABoss()
@@ -35,6 +36,12 @@ ABoss::ABoss()
 	HealthComp->OnHealthChanged.AddDynamic(this, &ABoss::HealthUpdated);
 	HealthComp->OnHealthEmpty.AddDynamic(this, &ABoss::Die);
 
+	cinematicComp = CreateDefaultSubobject<UCinematicComponent>(TEXT("Cinematic Component"));
+	cinematicComp->SetupAttachment(GetRootComponent());
+	cinematicComp->onCinematicStarted.AddDynamic(this, &ABoss::CinematicStarted);
+	cinematicComp->onCinematicStopped.AddDynamic(this, &ABoss::CinematicStopped);
+
+
 
 }
 
@@ -54,8 +61,7 @@ void ABoss::BeginPlay()
 {
 	Super::BeginPlay();
 	HealthBar = Cast<UValueGauge>(HealthBarWidgetComp->GetUserWidgetObject());
-	GetWorldTimerManager().SetTimer(enemySpawnTimer, this, &ABoss::SpawnEnemies, enemySpawnRate, true);
-	
+	//SetLogicEnabled(false);
 }
 
 // Called every frame
@@ -98,18 +104,12 @@ void ABoss::HealthUpdated(float health, float delta, float maxHealth)
 
 void ABoss::Die()
 {
-	AAIController* AIC = GetController<AAIController>();
-	if (AIC)
-	{
-		UBrainComponent* braincomp = AIC->GetBrainComponent();
-		if (braincomp)
-		{
-			braincomp->StopLogic("Dead");
-		}
-	}
+
+	SetLogicEnabled(false);
 	OnDead();
 	RelayDeath();
 	Destroy();
+	GetWorldTimerManager().ClearTimer(enemySpawnTimer);
 
 }
 
@@ -120,6 +120,7 @@ void ABoss::SpawnEnemies()
 	enemies.Add(enemy);
 	if(enemy)
 	enemy->SpawnDefaultController();
+	//enemy->OnDestroyed().AddDynamic(this, &ABoss::RemoveEnemies);
 
 
 
@@ -144,5 +145,40 @@ void ABoss::RelayDeath()
 	}
 	playerController->BossDefeated();
 
+}
+
+void ABoss::CinematicStarted()
+{
+	SetLogicEnabled(false);
+}
+
+void ABoss::CinematicStopped()
+{
+	SetLogicEnabled(true);
+	GetWorldTimerManager().SetTimer(enemySpawnTimer, this, &ABoss::SpawnEnemies, enemySpawnRate, true);
+
+
+}
+
+void ABoss::SetLogicEnabled(bool bIsLogicEnabled)
+{
+
+	AAIController* AIC = GetController<AAIController>();
+	if (AIC)
+	{
+		UBrainComponent* braincomp = AIC->GetBrainComponent();
+		if (braincomp)
+		{
+			if (bIsLogicEnabled)
+			{
+				braincomp->StartLogic();
+			}
+			else 
+			{
+				braincomp->StopLogic("Dead");
+			}
+			
+		}
+	}
 }
 
