@@ -12,11 +12,14 @@ void AMeleeWeapon::AttackPointAnimNotify()
 	FVector ownerViewLocation;
 	FRotator ownerViewRot;
 	FCollisionShape capsule = FCollisionShape::MakeCapsule(40, 80);
+	FCollisionQueryParams CollisionParameters;
+	CollisionParameters.AddIgnoredActor(GetOwner());
 
 	GetOwner()->GetActorEyesViewPoint(ownerViewLocation, ownerViewRot);
 
-	if(GetWorld()->SweepSingleByChannel(result, ownerViewLocation, ownerViewLocation + ownerViewRot.Vector() * meleeRange, FQuat::Identity, ECC_Camera, capsule))
+	if(GetWorld()->SweepSingleByChannel(result, ownerViewLocation , ownerViewLocation + ownerViewRot.Vector() * meleeRange, FQuat::Identity, ECC_Camera, capsule, CollisionParameters))
 	{
 		UGameplayStatics::ApplyDamage(result.GetActor(), GetWeaponDamage(), nullptr, GetOwner(), nullptr);
+		UGameplayStatics::PlaySoundAtLocation(this, GetImpactSound(), result.ImpactPoint);
 	}
 }

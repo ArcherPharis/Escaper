@@ -64,6 +64,7 @@ public:
 
 	FORCEINLINE UTexture2D* GetCrossHairTexture() const { return crossHairTexture; }
 	FORCEINLINE UTexture2D* GetWeaponIcon() const { return weaponIconTexture; }
+	FORCEINLINE USoundBase* GetImpactSound() const { return successfulHitSFX; }
 
 	UStaticMesh* GetMesh() const { return WeaponMesh->GetStaticMesh(); }
 
@@ -101,6 +102,9 @@ private:
 	UTexture2D* weaponIconTexture;
 
 	USkeletalMeshComponent* OwnerSkeletalMesh;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
+	USoundBase* successfulHitSFX;
 
 
 

@@ -54,6 +54,8 @@ void AProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimi
 	if (OtherActor && OtherActor != this)
 	{
 		TArray<AActor*> ignoreActors;
+		if(explosionSound)
+		UGameplayStatics::PlaySoundAtLocation(this, explosionSound, GetActorLocation());
 		UGameplayStatics::ApplyRadialDamage(this, damage, Hit.ImpactPoint, 200, nullptr, ignoreActors, GetOwner(), GetOwner()->GetInstigatorController());
 	}
 	Destroy();

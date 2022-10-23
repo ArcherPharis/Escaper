@@ -14,7 +14,7 @@ void AGun::AttackPointAnimNotify()
 		if (GetWorld()->LineTraceSingleByChannel(result, Start, ownerViewLoc + ownerViewRot.Vector() * shootRange, ECC_Camera))
 		{
 			UGameplayStatics::ApplyDamage(result.GetActor(), GetWeaponDamage(), nullptr, GetOwner(), nullptr);
-			
+			UGameplayStatics::PlaySoundAtLocation(this, GetImpactSound(), result.ImpactPoint);
 			BP_OnBulletHit(result);
 		}
 
