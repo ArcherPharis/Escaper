@@ -13,5 +13,6 @@ UCLASS()
 class THEESCAPER_API AEGameMode : public AGameModeBase
 {
 	GENERATED_BODY()
+
 	
 };

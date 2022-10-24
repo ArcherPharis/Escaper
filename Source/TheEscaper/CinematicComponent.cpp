@@ -42,10 +42,12 @@ void UCinematicComponent::Triggered(UPrimitiveComponent* OverlappedComponent, AA
 		ALevelSequenceActor* sequenceActor;
 		ULevelSequencePlayer::CreateLevelSequencePlayer(this, SequenceToPlay, playSettings, sequenceActor);
 
-		if (sequenceActor)
+
+		if (sequenceActor && pc)
 		{
 			sequenceActor->SequencePlayer->Play();
 			onCinematicStarted.Broadcast();
+			pc->PlayBossMusic();
 			sequenceActor->SequencePlayer->OnStop.AddDynamic(this, &UCinematicComponent::CinematicStop);
 
 

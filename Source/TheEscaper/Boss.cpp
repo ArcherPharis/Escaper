@@ -13,6 +13,7 @@
 #include "EPlayerControler.h"
 #include "EEnemy.h"
 #include"CinematicComponent.h"
+#include "Components/PointLightComponent.h"
 
 // Sets default values
 ABoss::ABoss()
@@ -40,6 +41,9 @@ ABoss::ABoss()
 	cinematicComp->SetupAttachment(GetRootComponent());
 	cinematicComp->onCinematicStarted.AddDynamic(this, &ABoss::CinematicStarted);
 	cinematicComp->onCinematicStopped.AddDynamic(this, &ABoss::CinematicStopped);
+
+	pointLight = CreateDefaultSubobject<UPointLightComponent>(TEXT("Point Light"));
+	pointLight->SetupAttachment(RotationPivot);
 
 
 
@@ -92,6 +96,7 @@ void ABoss::Attack()
 	AProjectile* projectile = GetWorld()->SpawnActor<AProjectile>(projectileClass, location, rotation);
 	projectile->SetDamage(ProjectileDamage);
 	projectile->SetOwner(this);
+	OnAttack();
 }
 
 void ABoss::HealthUpdated(float health, float delta, float maxHealth)
@@ -120,7 +125,6 @@ void ABoss::SpawnEnemies()
 	enemies.Add(enemy);
 	if(enemy)
 	enemy->SpawnDefaultController();
-	//enemy->OnDestroyed().AddDynamic(this, &ABoss::RemoveEnemies);
 
 
 

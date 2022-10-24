@@ -30,6 +30,8 @@ public:
 	void BossDefeated();
 	void DelayPause();
 
+	void PlayBossMusic();
+
 
 
 
@@ -44,6 +46,14 @@ private:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Player")
 	TSubclassOf<class UInGameUI> inGameUIClass;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Player")
+	class UAudioComponent* audioComponent;
+	UPROPERTY(EditDefaultsOnly, Category = "Music")
+	USoundBase* backgroundMusic;
+	UPROPERTY(EditDefaultsOnly, Category = "Music")
+	USoundBase* bossMusic;
+
 
 
 	UInGameUI* inGameUI;

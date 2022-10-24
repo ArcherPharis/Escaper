@@ -33,6 +33,9 @@ protected:
 	UFUNCTION(BlueprintImplementableEvent, Category = "Boss")
 	void OnDead();
 
+	UFUNCTION(BlueprintImplementableEvent, Category = "Boss")
+	void OnAttack();
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -49,12 +52,18 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Boss")
 	FORCEINLINE USceneComponent* GetRotatePivot() const { return RotationPivot; }
 
+	UFUNCTION(BlueprintCallable, Category = "Boss")
+	FORCEINLINE class UPointLightComponent* GetEyeLight() const { return pointLight; }
+
 private:
 	UPROPERTY(VisibleAnywhere, Category = "Boss")
 	USceneComponent* RootComp;
 
 	UPROPERTY(VisibleAnywhere, Category = "Boss")
 	USceneComponent* WheelPivot;
+
+	UPROPERTY(VisibleAnywhere, Category = "Boss")
+	UPointLightComponent* pointLight;
 
 	UPROPERTY(VisibleAnywhere, Category = "Boss")
 	USceneComponent* RotationPivot;

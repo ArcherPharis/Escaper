@@ -4,6 +4,7 @@
 #include "Triggerable.h"
 #include "Components/SceneComponent.h"
 #include "Components/BoxComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 ATriggerable::ATriggerable()
@@ -37,14 +38,17 @@ void ATriggerable::Tick(float DeltaTime)
 
 void ATriggerable::Overlapped(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-
-	UE_LOG(LogTemp, Warning, TEXT("Overlapped"));
+	if (interactSFX)
+	{
+		UGameplayStatics::PlaySoundAtLocation(this, interactSFX, GetActorLocation());
+	}
+	
 	OnTriggered(OtherActor);
 }
 
 void ATriggerable::OverlapEnded(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Overlap ended"));
+
 	OnActorLeftTrigger(OtherActor);
 
 }

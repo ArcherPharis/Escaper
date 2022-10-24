@@ -27,6 +27,8 @@ public:
 
 	FORCEINLINE UBoxComponent* GetTriggerBox() const { return TriggerComp; }
 
+	USoundBase* GetInteractSFX() const { return interactSFX; }
+
 private:
 	UPROPERTY()
 	class USceneComponent* RootComp;
@@ -41,4 +43,7 @@ private:
 	void OverlapEnded(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 	virtual void OnTriggered(AActor* actor);
 	virtual void OnActorLeftTrigger(AActor* actor);
+
+	UPROPERTY(EditDefaultsOnly, Category = "Trigger")
+	USoundBase* interactSFX;
 };

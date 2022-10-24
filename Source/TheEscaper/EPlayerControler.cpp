@@ -6,6 +6,7 @@
 #include "HealthComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "InGameUI.h"
+#include "Components/AudioComponent.h"
 
 void AEPlayerControler::OnPossess(APawn* newPawn) //happens every time something posseses, not just at start.
 {
@@ -26,6 +27,8 @@ void AEPlayerControler::OnPossess(APawn* newPawn) //happens every time something
 			inGameUI->OnGameResumed.AddDynamic(this, &AEPlayerControler::ResumeGame);
 			inGameUI->OnGameRestarted.AddDynamic(this, &AEPlayerControler::RestartGame);
 			inGameUI->OnGameQuit.AddDynamic(this, &AEPlayerControler::QuitGame);
+			audioComponent->SetSound(backgroundMusic);
+			audioComponent->Play();
 
 
 
@@ -42,6 +45,8 @@ void AEPlayerControler::OnPossess(APawn* newPawn) //happens every time something
 AEPlayerControler::AEPlayerControler()
 {
 	bAutoManageActiveCameraTarget = false;
+	audioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("Audio Component"));
+	audioComponent->SetupAttachment(RootComponent);
 }
 
 void AEPlayerControler::SetUIHidden(bool bHideUI)
@@ -103,6 +108,7 @@ void AEPlayerControler::Caught()
 	SetInputMode(FInputModeUIOnly());
 	GetWorldTimerManager().SetTimer(CaughtTimerHandle, this, &AEPlayerControler:: CaughtFinished, caughtDuration, false);
 	inGameUI->SwitchToGameOverMenu();
+	SetShowMouseCursor(true);
 }
 
 void AEPlayerControler::PauseGame()
@@ -132,6 +138,13 @@ void AEPlayerControler::DelayPause()
 	SetShowMouseCursor(true);
 	UGameplayStatics::SetGamePaused(this, true);
 
+}
+
+void AEPlayerControler::PlayBossMusic()
+{
+	audioComponent->Stop();
+	audioComponent->SetSound(bossMusic);
+	audioComponent->Play();
 }
 
 
